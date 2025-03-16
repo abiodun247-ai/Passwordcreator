@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sam Password Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #0A192F;
+            color: white;
+            padding: 20px;
+        }
+        h1 { color: #64ffda; }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background: #112240;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #64ffda;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            background: #64ffda;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .password-box {
+            background: black;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .dark-mode {
+            background: #001220;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sam Password Generator</h1>
+    <div class="container">
+        <label>Choose Mode:</label>
+        <select id="mode">
+            <option value="random">Random</option>
+            <option value="custom">Custom</option>
+        </select>
+        
+        <div id="customInput" style="display: none;">
+            <label>Enter Base Word:</label>
+            <input type="text" id="baseWord">
+        </div>
+        
+        <label>Password Strength:</label>
+        <select id="strength">
+            <option value="weak">Weak</option>
+            <option value="strong">Strong</option>
+            <option value="veryStrong">Very Strong</option>
+        </select>
+        
+        <label>Password Length:</label>
+        <input type="number" id="length" min="8" max="32" value="12">
+        
+        <button onclick="generatePassword()">Generate Password</button>
+        <p class="password-box" id="password">Your password will appear here...</p>
+        <button onclick="copyPassword()">Copy to Clipboard</button>
+    </div>
+    
+    <script>
+        document.getElementById('mode').addEventListener('change', function() {
+            document.getElementById('customInput').style.display = 
+                this.value === 'custom' ? 'block' : 'none';
+        });
+
+        function generatePassword() {
+            let mode = document.getElementById('mode').value;
+            let strength = document.getElementById('strength').value;
+            let length = document.getElementById('length').value;
+            let baseWord = document.getElementById('baseWord').value || "Sam";
+            let password = "";
+
+            let chars = "abcdefghijklmnopqrstuvwxyz";
+            let numbers = "0123456789";
+            let symbols = "!@#$%^&*()_+-=[]{}";
+
+            if (mode === "custom") {
+                password = baseWord;
+                if (strength !== "weak") {
+                    password += numbers[Math.floor(Math.random() * numbers.length)];
+                    password += symbols[Math.floor(Math.random() * symbols.length)];
+                }
+                if (strength === "veryStrong") {
+                    for (let i = password.length; i < length; i++) {
+                        let set = chars + numbers + symbols;
+                        password += set[Math.floor(Math.random() * set.length)];
+                    }
+                }
+            } else {
+                let set = chars + numbers + symbols;
+                for (let i = 0; i < length; i++) {
+                    password += set[Math.floor(Math.random() * set.length)];
+                }
+            }
+            document.getElementById('password').textContent = password;
+        }
+
+        function copyPassword() {
+            let password = document.getElementById('password').textContent;
+            navigator.clipboard.writeText(password);
+            alert("Password copied!");
+        }
+    </script>
+    
+    <br><br>
+  
+    </textarea>
+
+    <footer style="margin-top:20px; text-align:center; font-size:14px; opacity:0.7;">
+        Designed by <b>Abiodun Samuel</b>
+    </footer>
+</body>
+</html>
